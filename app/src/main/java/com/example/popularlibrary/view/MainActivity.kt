@@ -6,14 +6,17 @@ import android.os.PersistableBundle
 import android.view.View
 import com.example.popularlibrary.databinding.ActivityMainBinding
 import com.example.popularlibrary.presenter.MainPresenter
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import moxy.presenter.ProvidePresenter
 
-class MainActivity : AppCompatActivity() , MainView {
+class MainActivity : MvpAppCompatActivity() , MainView {
 
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private val presenter = MainPresenter(this)
+    private val presenter: MainPresenter by moxyPresenter { MainPresenter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
