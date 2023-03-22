@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.popularlibrary.R
 import com.example.popularlibrary.databinding.RepoItemBinding
-import com.example.popularlibrary.databinding.UserItemBinding
 import com.example.popularlibrary.view.user.ReposItemView
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class RepoViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.repo_item, parent,false)

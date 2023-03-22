@@ -2,7 +2,7 @@ package com.example.popularlibrary.view.user.user_repos
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.popularlibrary.view.user.IUserReposListPresenter
+import com.example.popularlibrary.view.user.presenter.IUserReposListPresenter
 
 class RepoAdapter(private val userListRepoPresenter: IUserReposListPresenter):RecyclerView.Adapter<RepoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RepoViewHolder(parent).apply {

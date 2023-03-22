@@ -9,7 +9,7 @@ import com.example.popularlibrary.App
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.databinding.FragmentUsersBinding
-import com.example.popularlibrary.presenter.UsersPresenter
+import com.example.popularlibrary.view.users.presenter.UsersPresenter
 import com.example.popularlibrary.view.BackButtonListener
 import com.example.popularlibrary.view.users.adapter.UsersAdapter
 import moxy.MvpAppCompatFragment

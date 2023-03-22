@@ -11,7 +11,7 @@ import com.example.popularlibrary.App
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.databinding.FragmentUserBinding
-import com.example.popularlibrary.presenter.UserPresenter
+import com.example.popularlibrary.view.user.presenter.UserPresenter
 import com.example.popularlibrary.view.BackButtonListener
 import com.example.popularlibrary.view.user.user_repos.RepoAdapter
 import moxy.MvpAppCompatFragment

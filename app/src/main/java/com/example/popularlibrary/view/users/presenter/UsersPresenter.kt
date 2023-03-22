@@ -1,9 +1,8 @@
-package com.example.popularlibrary.presenter
+package com.example.popularlibrary.view.users.presenter
 
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.domain.UsersItem
 import com.example.popularlibrary.view.AndroidScreens
-import com.example.popularlibrary.view.users.IUsersListPresenter
 import com.example.popularlibrary.view.users.UserItemView
 import com.example.popularlibrary.view.users.UserView
 import com.github.terrakok.cicerone.Router

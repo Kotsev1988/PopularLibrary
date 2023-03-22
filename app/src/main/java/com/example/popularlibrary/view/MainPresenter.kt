@@ -1,4 +1,4 @@
-package com.example.popularlibrary.presenter
+package com.example.popularlibrary.view
 
 import com.example.popularlibrary.view.*
 import com.example.popularlibrary.view.screens.IScreens

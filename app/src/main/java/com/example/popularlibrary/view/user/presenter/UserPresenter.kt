@@ -1,9 +1,7 @@
-package com.example.popularlibrary.presenter
+package com.example.popularlibrary.view.user.presenter
 
 import com.example.popularlibrary.data.GitUsersRepoImpl
-import com.example.popularlibrary.domain.repos.Repos
 import com.example.popularlibrary.domain.repos.ReposItem
-import com.example.popularlibrary.view.user.IUserReposListPresenter
 import com.example.popularlibrary.view.user.ProfileView
 import com.example.popularlibrary.view.user.ReposItemView
 import com.github.terrakok.cicerone.Router
@@ -11,7 +9,7 @@ import moxy.MvpPresenter
 
 class UserPresenter(private val usersList: GitUsersRepoImpl, private val router: Router): MvpPresenter<ProfileView>() {
 
-    class ReposListPresenter() : IUserReposListPresenter{
+    class ReposListPresenter() : IUserReposListPresenter {
          val repos = mutableListOf<ReposItem>()
         override var onItemClickListener: ((ReposItemView) -> Unit)? = null
 

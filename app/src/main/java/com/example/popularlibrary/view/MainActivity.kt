@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.example.popularlibrary.App
 import com.example.popularlibrary.R
 import com.example.popularlibrary.databinding.ActivityMainBinding
-import com.example.popularlibrary.presenter.MainPresenter
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter

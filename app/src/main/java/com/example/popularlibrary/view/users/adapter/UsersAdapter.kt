@@ -2,7 +2,7 @@ package com.example.popularlibrary.view.users.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.popularlibrary.view.users.IUsersListPresenter
+import com.example.popularlibrary.view.users.presenter.IUsersListPresenter
 
 class UsersAdapter(private val presenter: IUsersListPresenter) :
     RecyclerView.Adapter<UsersViewHolder>() {

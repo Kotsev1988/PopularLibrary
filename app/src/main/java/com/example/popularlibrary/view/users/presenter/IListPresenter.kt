@@ -1,4 +1,6 @@
-package com.example.popularlibrary.view.users
+package com.example.popularlibrary.view.users.presenter
+
+import com.example.popularlibrary.view.users.IItemView
 
 interface IListPresenter <V: IItemView> {
 
