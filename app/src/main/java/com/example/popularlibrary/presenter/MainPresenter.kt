@@ -1,35 +1,21 @@
 package com.example.popularlibrary.presenter
 
-import com.example.popularlibrary.model.CounterModel
-import com.example.popularlibrary.view.MainView
+import com.example.popularlibrary.view.*
+import com.example.popularlibrary.view.screens.IScreens
+import com.github.terrakok.cicerone.Router
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
-class MainPresenter: MvpPresenter<MainView>() {
+class MainPresenter(private val router: Router, private val screens: IScreens) : MvpPresenter<MainView>() {
 
-    private val model = CounterModel()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.setFirstButton("0")
-        viewState.setSecondButton("0")
-        viewState.setThirdButton("0")
+        router.replaceScreen(screens.users())
     }
 
-    fun counterClickFirst(){
-        val nextValue = model.next(0)
-        viewState.setFirstButton(nextValue.toString())
+    fun backClicked(){
+        router.exit()
     }
-
-    fun counterClickSecond() {
-        val nextValue = model.next(1)
-        viewState.setSecondButton(nextValue.toString())
-    }
-
-    fun counterClickThird() {
-        val nextValue = model.next(2)
-        viewState.setThirdButton(nextValue.toString())
-    }
-
 }
