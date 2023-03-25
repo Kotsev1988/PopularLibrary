@@ -4,28 +4,27 @@ import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.domain.UserRepo
 import com.example.popularlibrary.domain.Users
 import com.example.popularlibrary.domain.UsersItem
-import com.example.popularlibrary.domain.repos.Repos
 import com.example.popularlibrary.domain.repos.ReposItem
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
+
 import retrofit2.Response
 
 class GitUsersRepoImpl(private val gitUsersAPIClient: GitUsersAPIClient) : UserRepo {
 
-
     override fun getUsers(onSuccess: (Users) -> Unit, onError: (Throwable) -> Unit) {
-        gitUsersAPIClient.getListOfUsers().enqueue(object : Callback<Users> {
-            override fun onResponse(call: Call<Users>, response: Response<Users>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { onSuccess(it) }
-                }
-            }
-
-            override fun onFailure(call: Call<Users>, t: Throwable) {
-                onError(Throwable("Error"))
-            }
-
-        })
+        gitUsersAPIClient.getListOfUsers().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    onSuccess(it)
+                },
+                {
+                    onError(it)
+                },
+            )
     }
 
     override fun getUser(
@@ -33,21 +32,14 @@ class GitUsersRepoImpl(private val gitUsersAPIClient: GitUsersAPIClient) : UserR
         onSuccess: (UsersItem) -> Unit,
         onError: (Throwable) -> Unit,
     ) {
-        gitUsersAPIClient.getUser(login).enqueue(object : Callback<UsersItem> {
+        gitUsersAPIClient.getUser(login).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 
-            override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        onSuccess(it)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                onError(Throwable("Error"))
-            }
-
-        })
+            .subscribe({
+                onSuccess(it)
+            }, {
+                onError(it)
+            })
     }
 
     override fun getUserRepos(
@@ -55,8 +47,11 @@ class GitUsersRepoImpl(private val gitUsersAPIClient: GitUsersAPIClient) : UserR
         onSuccess: (List<ReposItem>) -> Unit,
         onError: (Throwable) -> Unit,
     ) {
-        gitUsersAPIClient.getUserRepos(login = login).enqueue(object : Callback<List<ReposItem>>{
-            override fun onResponse(call: Call<List<ReposItem>>, response: Response<List<ReposItem>>) {
+        gitUsersAPIClient.getUserRepos(login = login).enqueue(object : Callback<List<ReposItem>> {
+            override fun onResponse(
+                call: Call<List<ReposItem>>,
+                response: Response<List<ReposItem>>,
+            ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         onSuccess(it)
@@ -69,6 +64,4 @@ class GitUsersRepoImpl(private val gitUsersAPIClient: GitUsersAPIClient) : UserR
             }
         })
     }
-
-
 }

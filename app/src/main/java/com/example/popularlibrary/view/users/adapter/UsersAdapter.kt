@@ -9,8 +9,9 @@ class UsersAdapter(private val presenter: IUsersListPresenter) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder =
         UsersViewHolder(parent).apply {
+
             itemView.setOnClickListener {
-                presenter.itemClickListener?.invoke(this)
+                presenter.itemClickStream.onNext(this)
             }
         }
 

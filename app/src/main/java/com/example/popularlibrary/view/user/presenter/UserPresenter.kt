@@ -5,12 +5,14 @@ import com.example.popularlibrary.domain.repos.ReposItem
 import com.example.popularlibrary.view.user.ProfileView
 import com.example.popularlibrary.view.user.ReposItemView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Observable
 import moxy.MvpPresenter
 
-class UserPresenter(private val usersList: GitUsersRepoImpl, private val router: Router): MvpPresenter<ProfileView>() {
+class UserPresenter(private val usersList: GitUsersRepoImpl, private val router: Router) :
+    MvpPresenter<ProfileView>() {
 
     class ReposListPresenter() : IUserReposListPresenter {
-         val repos = mutableListOf<ReposItem>()
+        val repos = mutableListOf<ReposItem>()
         override var onItemClickListener: ((ReposItemView) -> Unit)? = null
 
         override fun bindView(view: ReposItemView) {
@@ -27,32 +29,50 @@ class UserPresenter(private val usersList: GitUsersRepoImpl, private val router:
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+
         viewState.init()
+        repoListPresenter.onItemClickListener = { it ->
 
-        repoListPresenter.onItemClickListener={
-
+            Observable.just(it).map {
+                repoListPresenter.repos[it.pos].created_at
+            }.subscribe {
+                viewState.setRepoDateOnClick(it)
+            }
         }
     }
 
-     fun loadRepoData(login : String) {
-        usersList.getUserRepos(login,
-        onSuccess = {
-            repoListPresenter.repos.addAll(it)
-            viewState.updateList()
-        },
-        onError = {
+    fun loadRepoData(login: String) {
+        usersList.getUserRepos(
+            login = login,
+            onSuccess = {
+                Observable.just(it).flatMap {
+                    return@flatMap Observable.fromIterable(it)
+                }.take(5)
+                    .filter {
+                        it.has_projects
+                    }
+                    .subscribe({
+                        repoListPresenter.repos.add(it)
+                    }, {
 
-            viewState.onError(it)
-        })
+                        println("Error")
+                    })
+                //repoListPresenter.repos.addAll(it)
+                viewState.updateList()
+            },
+            onError = {
+                viewState.onError(it)
+            })
     }
 
-
-    fun loadData(login: String){
+    fun loadData(login: String) {
         usersList.getUser(
             login = login,
             onSuccess = {
+
                 viewState.setName(it.login)
                 viewState.setAvatar(it.avatar_url)
+
             },
             onError = {
                 viewState.onError(it)
@@ -60,7 +80,7 @@ class UserPresenter(private val usersList: GitUsersRepoImpl, private val router:
         )
     }
 
-    fun backPressed(): Boolean{
+    fun backPressed(): Boolean {
         router.exit()
         return true
     }

@@ -19,11 +19,10 @@ import moxy.ktx.moxyPresenter
 
 class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
-
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
 
-    private var repoAdapter: RepoAdapter? =null
+    private var repoAdapter: RepoAdapter? = null
 
     private val presenter: UserPresenter by moxyPresenter {
         UserPresenter(GitUsersRepoImpl(
@@ -38,7 +37,7 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentUserBinding.inflate(inflater)
         return binding.root
     }
@@ -46,6 +45,7 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var loginUser: String
+
         arguments?.let {
             loginUser = it.getString("login").toString()
             presenter.loadData(loginUser)
@@ -53,8 +53,6 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
         }
     }
-
-
 
     override fun init() {
 
@@ -69,6 +67,7 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     }
 
     override fun setAvatar(url: String) {
+
         binding.userAvatar.load(url)
     }
 
@@ -77,8 +76,11 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     }
 
     override fun updateList() {
-
         repoAdapter?.notifyDataSetChanged()
+    }
+
+    override fun setRepoDateOnClick(date: String) {
+        binding.createRpoAt.text = date
     }
 
     companion object {

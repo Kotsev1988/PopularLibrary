@@ -11,4 +11,5 @@ interface ProfileView: MvpView {
     fun setAvatar(url: String)
     fun onError(e: Throwable)
     fun updateList()
+    fun setRepoDateOnClick(date: String)
 }

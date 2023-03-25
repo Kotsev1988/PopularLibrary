@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.databinding.FragmentUsersBinding
+import com.example.popularlibrary.view.AndroidScreens
 import com.example.popularlibrary.view.users.presenter.UsersPresenter
 import com.example.popularlibrary.view.BackButtonListener
 import com.example.popularlibrary.view.users.adapter.UsersAdapter
@@ -16,14 +18,14 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 
-class UsersFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
+class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(GitUsersRepoImpl(
-            GitUsersAPIClient()), App.instance.router)
+            GitUsersAPIClient()), App.instance.router, AndroidScreens())
     }
     private var adapter: UsersAdapter? = null
 
@@ -35,9 +37,15 @@ class UsersFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentUsersBinding.inflate(inflater)
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     companion object {
@@ -54,6 +62,10 @@ class UsersFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     override fun updateList() {
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun onError(t: Throwable) {
+        Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
     }
 
     override fun backPressed(): Boolean = presenter.backPressed()
