@@ -6,6 +6,7 @@ import com.example.popularlibrary.domain.Users
 import com.example.popularlibrary.domain.UsersItem
 import com.example.popularlibrary.domain.repos.ReposItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Call
@@ -49,7 +50,9 @@ class GitUsersRepoImpl(private val gitUsersAPIClient: GitUsersAPIClient) : UserR
         onSuccess: (List<ReposItem>) -> Unit,
         onError: (Throwable) -> Unit,
     ) {
-        gitUsersAPIClient.getUserRepos(login = login).enqueue(object : Callback<List<ReposItem>> {
+
+        gitUsersAPIClient.getUserRepos(login = login)
+            .enqueue(object : Callback<List<ReposItem>> {
             override fun onResponse(
                 call: Call<List<ReposItem>>,
                 response: Response<List<ReposItem>>,

@@ -69,6 +69,8 @@ class UsersPresenter(
 
 
     private fun loadData() {
+
+
       disposable = usersList.getUsers(
 
             onSuccess = { it ->
@@ -77,11 +79,12 @@ class UsersPresenter(
                      Observable.just(it)
                 }.subscribe({
                     listPresenter.users.add(it)
+                    viewState.updateList()
                 }, {
                     viewState.onError(Throwable("Network Error"))
                 })
 
-                viewState.updateList()
+
             },
             onError = {
 
