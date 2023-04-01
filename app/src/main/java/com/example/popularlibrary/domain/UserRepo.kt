@@ -1,14 +1,10 @@
 package com.example.popularlibrary.domain
 
-import com.example.popularlibrary.domain.repos.Repos
 import com.example.popularlibrary.domain.repos.ReposItem
-import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.core.Single
 
 interface UserRepo {
-    fun getUsers(
-        onSuccess: (Users) ->Unit,
-        onError: (Throwable) ->Unit
-    ): Disposable
+    fun getUsers(): Single<Users>
 
     fun getUser(
         login: String,

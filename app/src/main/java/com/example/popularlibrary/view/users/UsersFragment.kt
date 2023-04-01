@@ -14,6 +14,8 @@ import com.example.popularlibrary.view.AndroidScreens
 import com.example.popularlibrary.view.users.presenter.UsersPresenter
 import com.example.popularlibrary.view.BackButtonListener
 import com.example.popularlibrary.view.users.adapter.UsersAdapter
+import com.example.popularlibrary.view.users.loadImage.GlideImageLoader
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -25,7 +27,7 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(GitUsersRepoImpl(
-            GitUsersAPIClient()), App.instance.router, AndroidScreens())
+            GitUsersAPIClient()), AndroidSchedulers.mainThread(), App.instance.router, AndroidScreens())
     }
     private var adapter: UsersAdapter? = null
 
@@ -56,7 +58,7 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     override fun init() {
         binding.usersRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = UsersAdapter(presenter.listPresenter)
+        adapter = UsersAdapter(presenter.listPresenter, GlideImageLoader())
         binding.usersRecycler.adapter = adapter
     }
 

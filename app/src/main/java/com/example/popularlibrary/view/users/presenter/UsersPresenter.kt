@@ -8,6 +8,7 @@ import com.example.popularlibrary.view.users.UserView
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -18,8 +19,9 @@ import java.util.concurrent.TimeUnit
 @InjectViewState
 class UsersPresenter(
     private val usersList: GitUsersRepoImpl,
+    private val uiObserve: Scheduler,
     private val router: Router,
-    private val screens: IScreens
+    private val screens: IScreens,
 ) : MvpPresenter<UserView>() {
     private lateinit var disposable: Disposable
 
@@ -27,12 +29,13 @@ class UsersPresenter(
 
         var users = mutableListOf<UsersItem>()
         override var itemClickListener: ((UserItemView) -> Unit)? = null
-       override val itemClickStream: PublishSubject<UserItemView> = PublishSubject.create()
+        override val itemClickStream: PublishSubject<UserItemView> = PublishSubject.create()
 
         override fun bindView(view: UserItemView) {
 
             val user = users[view.pos]
 
+            user.avatar_url.let { view.loadAvatar(it) }
             Observable.just(user).map {
                 it.login
             }.subscribe {
@@ -57,43 +60,34 @@ class UsersPresenter(
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{
+            .subscribe {
                 router.navigateTo(screens.user(it))
             }
     }
 
     private fun getLoginByPosition(position: Int): Observable<String> =
         Observable.just(listPresenter.users).map {
-             it[position].login
+            it[position].login
         }
 
 
     private fun loadData() {
 
 
-      disposable = usersList.getUsers(
-
-            onSuccess = { it ->
-
-                Observable.fromIterable(it).flatMap {
-                     Observable.just(it)
-                }.subscribe({
-                    listPresenter.users.add(it)
+        disposable = usersList.getUsers()
+            .observeOn(uiObserve).subscribe(
+                { repos ->
+                    listPresenter.users.clear()
+                    listPresenter.users.addAll(repos)
                     viewState.updateList()
+
                 }, {
-                    viewState.onError(Throwable("Network Error"))
+                    viewState.onError(it)
                 })
 
-
-            },
-            onError = {
-
-                viewState.onError(it)
-            }
-        )
     }
 
-    fun destroyView(){
+    fun destroyView() {
         disposable.dispose()
     }
 
