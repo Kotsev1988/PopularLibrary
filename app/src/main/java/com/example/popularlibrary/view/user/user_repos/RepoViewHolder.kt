@@ -16,9 +16,4 @@ class RepoViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     override fun setRepoName(name: String) {
         binding.repoName.text = name
     }
-
-
-
-
-
 }

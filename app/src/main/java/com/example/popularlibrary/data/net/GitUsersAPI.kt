@@ -2,6 +2,7 @@ package com.example.popularlibrary.data.net
 
 import com.example.popularlibrary.domain.Users
 import com.example.popularlibrary.domain.UsersItem
+import com.example.popularlibrary.domain.repos.Repos
 import com.example.popularlibrary.domain.repos.ReposItem
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Call
@@ -21,6 +22,6 @@ interface GitUsersAPI {
     @GET("users/{login}/repos")
     fun getUserRepos(
         @Path("login") userLogin: String,
-    ): Call<List<ReposItem>>
+    ): Single<Repos>
 
 }

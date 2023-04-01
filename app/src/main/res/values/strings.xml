@@ -7,4 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Users">USERS</string>
     <string name="repos">REPOS</string>
+    <string name="created_date">created date</string>
+    <string name="forks">forks</string>
 </resources>

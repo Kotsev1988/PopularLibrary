@@ -5,10 +5,16 @@ import com.example.popularlibrary.domain.repos.ReposItem
 import com.example.popularlibrary.view.user.ProfileView
 import com.example.popularlibrary.view.user.ReposItemView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 
-class UserPresenter(private val usersList: GitUsersRepoImpl, private val router: Router) :
+class UserPresenter(
+    private val usersList: GitUsersRepoImpl,
+    val uiScheduler: Scheduler,
+    private val router: Router,
+) :
     MvpPresenter<ProfileView>() {
 
     class ReposListPresenter() : IUserReposListPresenter {
@@ -33,56 +39,45 @@ class UserPresenter(private val usersList: GitUsersRepoImpl, private val router:
         viewState.init()
         repoListPresenter.onItemClickListener = { it ->
 
-            Observable.just(it).map {
-                repoListPresenter.repos[it.pos].created_at
-            }.subscribe {
-                viewState.setRepoDateOnClick(it)
-            }
+            Observable.just(it)
+                .map {
+                    Pair(repoListPresenter.repos[it.pos].created_at,
+                        repoListPresenter.repos[it.pos].forks)
+                }
+                .subscribe {
+
+                    viewState.setRepoDateOnClick(it.first, it.second)
+                }
         }
     }
 
     fun loadRepoData(login: String) {
-        usersList.getUserRepos(
-            login = login,
-            onSuccess = {
-                Observable.just(it).flatMap {
-                    return@flatMap Observable.fromIterable(it)
-                }.take(5)
-                    .filter {
-                        it.has_projects
-                    }
-                    .subscribe({
-                        repoListPresenter.repos.add(it)
-                    }, {
-
-                        println("Error")
-                    })
-                //repoListPresenter.repos.addAll(it)
+        usersList.getUserRepos(login = login)
+            .observeOn(uiScheduler)
+            .subscribe({ repoList ->
+                repoListPresenter.repos.clear()
+                repoListPresenter.repos.addAll(repoList)
                 viewState.updateList()
-            },
-            onError = {
+
+            }, {
                 viewState.onError(it)
             })
     }
 
     fun loadData(login: String) {
-        usersList.getUser(
-            login = login,
-            onSuccess = {
-
-                viewState.setName(it.login)
-                viewState.setAvatar(it.avatar_url)
-
-            },
-            onError = {
-                viewState.onError(it)
-            }
-        )
+        usersList.getUser(login = login)
+            .observeOn(uiScheduler)
+            .subscribe(
+                { repo ->
+                    viewState.setName(repo.login)
+                    viewState.setAvatar(repo.avatar_url)
+                }, {
+                    viewState.onError(it)
+                })
     }
 
     fun backPressed(): Boolean {
         router.exit()
         return true
     }
-
 }
