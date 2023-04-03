@@ -1,7 +1,7 @@
 package com.example.popularlibrary.view.users.presenter
 
 import com.example.popularlibrary.data.GitUsersRepoImpl
-import com.example.popularlibrary.domain.UsersItem
+import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.screens.IScreens
 import com.example.popularlibrary.view.users.UserItemView
 import com.example.popularlibrary.view.users.UserView
@@ -55,24 +55,15 @@ class UsersPresenter(
         loadData()
 
         listPresenter.itemClickStream.debounce(300, TimeUnit.MILLISECONDS)
-            .switchMap {
-                getLoginByPosition(it.pos)
-            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                router.navigateTo(screens.user(it))
+                val user = listPresenter.users[it.pos]
+                router.navigateTo(screens.user(user))
             }
     }
 
-    private fun getLoginByPosition(position: Int): Observable<String> =
-        Observable.just(listPresenter.users).map {
-            it[position].login
-        }
-
-
     private fun loadData() {
-
 
         disposable = usersList.getUsers()
             .observeOn(uiObserve).subscribe(

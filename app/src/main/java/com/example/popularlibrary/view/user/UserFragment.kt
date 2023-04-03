@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
+import com.example.popularlibrary.data.GitHubUsersRepoImpl
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
+import com.example.popularlibrary.data.room.Database
 import com.example.popularlibrary.databinding.FragmentUserBinding
+import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.presenter.UserPresenter
 import com.example.popularlibrary.view.BackButtonListener
+import com.example.popularlibrary.view.network.NetworkStatusImpl
 import com.example.popularlibrary.view.user.loadUserAvatar.LoadUserAvatar
 import com.example.popularlibrary.view.user.user_repos.RepoAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -27,8 +31,9 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     private val loadUserAvatar = LoadUserAvatar()
 
     private val presenter: UserPresenter by moxyPresenter {
-        UserPresenter(GitUsersRepoImpl(
-            GitUsersAPIClient()), AndroidSchedulers.mainThread(), App.instance.router)
+        var user =  arguments?.getParcelable<UsersItem>("user") as UsersItem
+        UserPresenter(user, GitHubUsersRepoImpl(GitUsersAPIClient(), NetworkStatusImpl(App.instance),
+            Database.getInstance()), AndroidSchedulers.mainThread(), App.instance.router)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,13 +51,8 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var loginUser: String
-
-        arguments?.let {
-            loginUser = it.getString("login").toString()
-            presenter.loadData(loginUser)
-            presenter.loadRepoData(loginUser)
-        }
+       presenter.loadData()
+        presenter.loadRepoData()
     }
 
     override fun init() {
@@ -89,10 +89,10 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     companion object {
 
         @JvmStatic
-        fun newInstance(login: String): UserFragment {
+        fun newInstance(user: UsersItem): UserFragment {
             val fragment = UserFragment()
             val arg = Bundle()
-            arg.putString("login", login)
+            arg.putParcelable("user", user)
             fragment.arguments = arg
             return fragment
         }

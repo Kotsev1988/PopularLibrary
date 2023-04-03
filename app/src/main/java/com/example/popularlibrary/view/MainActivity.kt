@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.example.popularlibrary.App
 import com.example.popularlibrary.R
 import com.example.popularlibrary.databinding.ActivityMainBinding
-import com.example.popularlibrary.rx.Creation
+
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
@@ -26,7 +26,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Creation().exec()
+
     }
 
     override fun onResumeFragments() {

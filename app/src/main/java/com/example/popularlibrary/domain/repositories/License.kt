@@ -1,4 +1,4 @@
-package com.example.popularlibrary.domain.repos
+package com.example.popularlibrary.domain.repositories
 
 data class License(
     val key: String,

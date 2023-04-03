@@ -1,4 +1,4 @@
-package com.example.popularlibrary.domain.repos
+package com.example.popularlibrary.domain.repositories
 
 data class Owner(
     val avatar_url: String,

@@ -1,17 +1,19 @@
 package com.example.popularlibrary.view.user.presenter
 
+import com.example.popularlibrary.data.GitHubUsersRepoImpl
 import com.example.popularlibrary.data.GitUsersRepoImpl
-import com.example.popularlibrary.domain.repos.ReposItem
+import com.example.popularlibrary.domain.repositories.ReposItem
+import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.ProfileView
 import com.example.popularlibrary.view.user.ReposItemView
 import com.github.terrakok.cicerone.Router
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 
 class UserPresenter(
-    private val usersList: GitUsersRepoImpl,
+    private val user: UsersItem,
+    private val repoList: GitHubUsersRepoImpl,
     val uiScheduler: Scheduler,
     private val router: Router,
 ) :
@@ -42,7 +44,7 @@ class UserPresenter(
             Observable.just(it)
                 .map {
                     Pair(repoListPresenter.repos[it.pos].created_at,
-                        repoListPresenter.repos[it.pos].forks)
+                        repoListPresenter.repos[it.pos].forks_count)
                 }
                 .subscribe {
 
@@ -51,8 +53,8 @@ class UserPresenter(
         }
     }
 
-    fun loadRepoData(login: String) {
-        usersList.getUserRepos(login = login)
+    fun loadRepoData() {
+        repoList.getUserRepos(login = user)
             .observeOn(uiScheduler)
             .subscribe({ repoList ->
                 repoListPresenter.repos.clear()
@@ -64,16 +66,10 @@ class UserPresenter(
             })
     }
 
-    fun loadData(login: String) {
-        usersList.getUser(login = login)
-            .observeOn(uiScheduler)
-            .subscribe(
-                { repo ->
-                    viewState.setName(repo.login)
-                    viewState.setAvatar(repo.avatar_url)
-                }, {
-                    viewState.onError(it)
-                })
+    fun loadData() {
+        viewState.setName(user.login)
+        viewState.setAvatar(user.avatar_url)
+
     }
 
     fun backPressed(): Boolean {

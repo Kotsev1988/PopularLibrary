@@ -1,8 +1,10 @@
 package com.example.popularlibrary.data.net
 
-import com.example.popularlibrary.domain.Users
-import com.example.popularlibrary.domain.UsersItem
-import com.example.popularlibrary.domain.repos.Repos
+import com.example.popularlibrary.data.room.repository.entity.RoomGitHubRepository
+import com.example.popularlibrary.data.room.users.entity.RoomGitHubUsers
+import com.example.popularlibrary.domain.users.UsersItem
+import com.example.popularlibrary.domain.repositories.Repos
+import com.example.popularlibrary.domain.repositories.ReposItem
 import com.google.gson.GsonBuilder
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
@@ -31,13 +33,13 @@ class GitUsersAPIClient {
         return@lazy apiGitRetrofit(baseURL).create(GitUsersAPI::class.java)
     }
 
-    fun getListOfUsers(): Single<Users> = serviceApi.getUsers()
+    fun getListOfUsers(): Single<List<UsersItem>> = serviceApi.getUsers()
 
 
     fun getUser(login: String): Single<UsersItem> = serviceApi.getUser(login)
 
 
-    fun getUserRepos(login: String): Single<Repos> = serviceApi.getUserRepos(login)
+    fun getUserRepos(login: String): Single<List<ReposItem>> = serviceApi.getUserRepos(login)
 
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
