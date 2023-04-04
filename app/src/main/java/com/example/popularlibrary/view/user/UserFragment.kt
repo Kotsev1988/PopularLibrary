@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
 import com.example.popularlibrary.data.GitHubUsersRepoImpl
-import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.data.room.Database
+import com.example.popularlibrary.data.room.cache.room.RoomGitHubRepositoriesCache
 import com.example.popularlibrary.databinding.FragmentUserBinding
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.presenter.UserPresenter
@@ -33,7 +33,7 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     private val presenter: UserPresenter by moxyPresenter {
         var user =  arguments?.getParcelable<UsersItem>("user") as UsersItem
         UserPresenter(user, GitHubUsersRepoImpl(GitUsersAPIClient(), NetworkStatusImpl(App.instance),
-            Database.getInstance()), AndroidSchedulers.mainThread(), App.instance.router)
+             RoomGitHubRepositoriesCache(Database.getInstance())), AndroidSchedulers.mainThread(), App.instance.router)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +51,7 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       presenter.loadData()
-        presenter.loadRepoData()
+
     }
 
     override fun init() {

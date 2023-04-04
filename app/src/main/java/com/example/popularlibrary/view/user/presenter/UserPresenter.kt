@@ -1,7 +1,6 @@
 package com.example.popularlibrary.view.user.presenter
 
 import com.example.popularlibrary.data.GitHubUsersRepoImpl
-import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.domain.repositories.ReposItem
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.ProfileView
@@ -14,7 +13,7 @@ import moxy.MvpPresenter
 class UserPresenter(
     private val user: UsersItem,
     private val repoList: GitHubUsersRepoImpl,
-    val uiScheduler: Scheduler,
+    private val uiScheduler: Scheduler,
     private val router: Router,
 ) :
     MvpPresenter<ProfileView>() {
@@ -39,6 +38,8 @@ class UserPresenter(
         super.onFirstViewAttach()
 
         viewState.init()
+        loadData()
+        loadRepoData()
         repoListPresenter.onItemClickListener = { it ->
 
             Observable.just(it)

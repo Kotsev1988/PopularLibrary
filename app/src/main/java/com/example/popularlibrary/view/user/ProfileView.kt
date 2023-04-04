@@ -1,5 +1,6 @@
 package com.example.popularlibrary.view.user
 
+
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType

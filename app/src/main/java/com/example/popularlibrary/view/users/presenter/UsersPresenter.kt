@@ -9,7 +9,6 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 import moxy.InjectViewState
@@ -23,7 +22,6 @@ class UsersPresenter(
     private val router: Router,
     private val screens: IScreens,
 ) : MvpPresenter<UserView>() {
-    private lateinit var disposable: Disposable
 
     class ListPresenter : IUsersListPresenter {
 
@@ -63,9 +61,9 @@ class UsersPresenter(
             }
     }
 
-    private fun loadData() {
+     fun loadData() {
 
-        disposable = usersList.getUsers()
+         usersList.getUsers()
             .observeOn(uiObserve).subscribe(
                 { repos ->
                     listPresenter.users.clear()
@@ -75,11 +73,9 @@ class UsersPresenter(
                 }, {
                     viewState.onError(it)
                 })
-
     }
 
     fun destroyView() {
-        disposable.dispose()
     }
 
     fun backPressed(): Boolean {

@@ -10,6 +10,7 @@ import com.example.popularlibrary.App
 import com.example.popularlibrary.data.GitUsersRepoImpl
 import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.data.room.Database
+import com.example.popularlibrary.data.room.cache.room.RoomGitHubUserCache
 import com.example.popularlibrary.databinding.FragmentUsersBinding
 import com.example.popularlibrary.view.AndroidScreens
 import com.example.popularlibrary.view.users.presenter.UsersPresenter
@@ -29,7 +30,12 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(GitUsersRepoImpl(
-            GitUsersAPIClient(), NetworkStatusImpl(App.instance), Database.getInstance()), AndroidSchedulers.mainThread(), App.instance.router, AndroidScreens())
+            GitUsersAPIClient(),
+            NetworkStatusImpl(App.instance),
+            RoomGitHubUserCache(Database.getInstance())),
+            AndroidSchedulers.mainThread(),
+            App.instance.router,
+            AndroidScreens())
     }
     private var adapter: UsersAdapter? = null
 
@@ -76,7 +82,6 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        presenter.destroyView()
         _binding = null
     }
 }
