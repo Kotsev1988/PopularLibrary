@@ -29,9 +29,8 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     private val binding get() = _binding!!
 
     private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(GitUsersRepoImpl(
-            GitUsersAPIClient(),
-            NetworkStatusImpl(App.instance),
+        UsersPresenter(
+            GitUsersRepoImpl(GitUsersAPIClient(), NetworkStatusImpl(App.instance),
             RoomGitHubUserCache(Database.getInstance())),
             AndroidSchedulers.mainThread(),
             App.instance.router,

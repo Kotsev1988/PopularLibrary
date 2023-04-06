@@ -1,6 +1,6 @@
 package com.example.popularlibrary.view.users.presenter
 
-import com.example.popularlibrary.data.GitUsersRepoImpl
+import com.example.popularlibrary.domain.IUserRepo
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.screens.IScreens
 import com.example.popularlibrary.view.users.UserItemView
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 @InjectViewState
 class UsersPresenter(
-    private val usersList: GitUsersRepoImpl,
+    private val usersList: IUserRepo,
     private val uiObserve: Scheduler,
     private val router: Router,
     private val screens: IScreens,

@@ -1,6 +1,6 @@
 package com.example.popularlibrary.view.user.presenter
 
-import com.example.popularlibrary.data.GitHubUsersRepoImpl
+import com.example.popularlibrary.domain.IRepositoryRepo
 import com.example.popularlibrary.domain.repositories.ReposItem
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.ProfileView
@@ -12,7 +12,7 @@ import moxy.MvpPresenter
 
 class UserPresenter(
     private val user: UsersItem,
-    private val repoList: GitHubUsersRepoImpl,
+    private val repoList: IRepositoryRepo,
     private val uiScheduler: Scheduler,
     private val router: Router,
 ) :
