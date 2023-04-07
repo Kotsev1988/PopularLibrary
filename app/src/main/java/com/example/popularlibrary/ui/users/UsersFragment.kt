@@ -10,7 +10,6 @@ import com.example.popularlibrary.App
 import com.example.popularlibrary.databinding.FragmentUsersBinding
 import com.example.popularlibrary.ui.BackButtonListener
 import com.example.popularlibrary.ui.users.adapter.UsersAdapter
-import com.example.popularlibrary.ui.users.loadImage.GlideImageLoader
 import com.example.popularlibrary.ui.users.presenter.UsersPresenter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
@@ -23,7 +22,9 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     private val binding get() = _binding!!
 
      val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(AndroidSchedulers.mainThread())
+        UsersPresenter(AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
     private var adapter: UsersAdapter? = null
 
@@ -54,7 +55,9 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     override fun init() {
         binding.usersRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = UsersAdapter(presenter.listPresenter, GlideImageLoader())
+        adapter = UsersAdapter(presenter.listPresenter).apply {
+            App.instance.appComponent.inject(this)
+        }
         binding.usersRecycler.adapter = adapter
     }
 

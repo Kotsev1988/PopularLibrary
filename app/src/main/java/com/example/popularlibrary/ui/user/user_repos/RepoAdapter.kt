@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.popularlibrary.ui.user.presenter.IUserReposListPresenter
 
 class RepoAdapter(private val userListRepoPresenter: IUserReposListPresenter):RecyclerView.Adapter<RepoViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RepoViewHolder(parent).apply {
         itemView.setOnClickListener {
             userListRepoPresenter.onItemClickListener?.invoke(this)

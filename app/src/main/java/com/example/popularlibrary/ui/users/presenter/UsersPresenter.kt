@@ -1,6 +1,5 @@
 package com.example.popularlibrary.ui.users.presenter
 
-import com.example.popularlibrary.App
 import com.example.popularlibrary.domain.IUserRepo
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.ui.screens.IScreens
@@ -57,7 +56,6 @@ class UsersPresenter(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        App.instance.appComponent.inject(this)
         viewState.init()
         loadData()
 

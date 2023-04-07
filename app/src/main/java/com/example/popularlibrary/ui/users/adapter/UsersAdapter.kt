@@ -5,24 +5,35 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.popularlibrary.databinding.UserItemBinding
-import com.example.popularlibrary.ui.users.loadImage.IImageLoader
 import com.example.popularlibrary.ui.users.UserItemView
+import com.example.popularlibrary.ui.users.loadImage.IImageLoader
 import com.example.popularlibrary.ui.users.presenter.IUsersListPresenter
+import javax.inject.Inject
 
 class UsersAdapter(
-    private val presenter: IUsersListPresenter,
-    val imageLoader: IImageLoader<AppCompatImageView>,
+    private val presenter: IUsersListPresenter
 ) :
     RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder =
-        UsersViewHolder(UserItemBinding.inflate(LayoutInflater.from(parent.context),
+
+    @Inject
+    lateinit var imageLoader: IImageLoader<AppCompatImageView>
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
+
+       return UsersViewHolder(UserItemBinding.inflate(LayoutInflater.from(parent.context),
             parent, false)).apply {
 
             itemView.setOnClickListener {
                 presenter.itemClickStream.onNext(this)
             }
         }
+    }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         presenter.bindView(holder.apply { pos = position })

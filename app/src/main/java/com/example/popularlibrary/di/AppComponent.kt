@@ -4,6 +4,8 @@ import com.example.popularlibrary.di.modules.*
 import com.example.popularlibrary.ui.MainActivity
 import com.example.popularlibrary.ui.MainPresenter
 import com.example.popularlibrary.ui.user.presenter.UserPresenter
+import com.example.popularlibrary.ui.user.user_repos.RepoAdapter
+import com.example.popularlibrary.ui.users.adapter.UsersAdapter
 import com.example.popularlibrary.ui.users.presenter.UsersPresenter
 import dagger.Component
 import javax.inject.Singleton
@@ -15,7 +17,8 @@ import javax.inject.Singleton
         ApiModule::class,
         CiceroneModule::class,
         DatabaseModule::class,
-        RepoModule::class
+        RepoModule::class,
+        ImageModule::class
     ]
 )
 interface AppComponent {
@@ -24,7 +27,8 @@ interface AppComponent {
     fun inject(mainPresenter: MainPresenter)
     fun inject(usersPresenter: UsersPresenter)
     fun inject(userPresenter: UserPresenter)
-
+    fun inject(usersAdapter: UsersAdapter)
+    fun inject(repoAdapter: RepoAdapter)
 
 
 }

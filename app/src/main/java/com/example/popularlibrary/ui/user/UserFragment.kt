@@ -7,17 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
-import com.example.popularlibrary.data.room.Database
 import com.example.popularlibrary.databinding.FragmentUserBinding
 import com.example.popularlibrary.domain.users.UsersItem
-import com.example.popularlibrary.ui.user.presenter.UserPresenter
 import com.example.popularlibrary.ui.BackButtonListener
 import com.example.popularlibrary.ui.user.loadUserAvatar.LoadUserAvatar
+import com.example.popularlibrary.ui.user.presenter.UserPresenter
 import com.example.popularlibrary.ui.user.user_repos.RepoAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
@@ -30,7 +28,9 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     private val presenter: UserPresenter by moxyPresenter {
         var user =  arguments?.getParcelable<UsersItem>("user") as UsersItem
 
-        UserPresenter(user, AndroidSchedulers.mainThread())
+        UserPresenter(user, AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
