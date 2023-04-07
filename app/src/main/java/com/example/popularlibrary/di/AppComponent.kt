@@ -3,9 +3,7 @@ package com.example.popularlibrary.di
 import com.example.popularlibrary.di.modules.*
 import com.example.popularlibrary.ui.MainActivity
 import com.example.popularlibrary.ui.MainPresenter
-import com.example.popularlibrary.ui.user.UserFragment
 import com.example.popularlibrary.ui.user.presenter.UserPresenter
-import com.example.popularlibrary.ui.users.UsersFragment
 import com.example.popularlibrary.ui.users.presenter.UsersPresenter
 import dagger.Component
 import javax.inject.Singleton
