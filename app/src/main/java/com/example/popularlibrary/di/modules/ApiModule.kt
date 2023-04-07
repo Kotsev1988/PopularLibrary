@@ -3,8 +3,7 @@ package com.example.popularlibrary.di.modules
 import com.example.popularlibrary.App
 import com.example.popularlibrary.data.net.GitUsersAPI
 import com.example.popularlibrary.domain.network.INetworkStatus
-import com.example.popularlibrary.view.network.NetworkStatusImpl
-import com.google.gson.FieldNamingPolicy
+import com.example.popularlibrary.ui.network.NetworkStatusImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".view.MainActivity"
+    tools:context=".ui.MainActivity"
     >
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.popularlibrary.view.users.UsersFragment"
+        android:name="com.example.popularlibrary.ui.users.UsersFragment"
         tools:layout = "@layout/fragment_users"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

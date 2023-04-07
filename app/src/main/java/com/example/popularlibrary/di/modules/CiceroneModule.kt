@@ -1,7 +1,7 @@
 package com.example.popularlibrary.di.modules
 
-import com.example.popularlibrary.view.AndroidScreens
-import com.example.popularlibrary.view.screens.IScreens
+import com.example.popularlibrary.ui.AndroidScreens
+import com.example.popularlibrary.ui.screens.IScreens
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import dagger.Module
