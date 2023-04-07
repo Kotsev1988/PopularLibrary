@@ -7,20 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
-import com.example.popularlibrary.data.GitHubUsersRepoImpl
-import com.example.popularlibrary.data.net.GitUsersAPIClient
 import com.example.popularlibrary.data.room.Database
-import com.example.popularlibrary.data.room.cache.room.RoomGitHubRepositoriesCache
 import com.example.popularlibrary.databinding.FragmentUserBinding
 import com.example.popularlibrary.domain.users.UsersItem
 import com.example.popularlibrary.view.user.presenter.UserPresenter
 import com.example.popularlibrary.view.BackButtonListener
-import com.example.popularlibrary.view.network.NetworkStatusImpl
 import com.example.popularlibrary.view.user.loadUserAvatar.LoadUserAvatar
 import com.example.popularlibrary.view.user.user_repos.RepoAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
 
@@ -30,10 +27,14 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     private var repoAdapter: RepoAdapter? = null
     private val loadUserAvatar = LoadUserAvatar()
 
+    @Inject lateinit var database: Database
+
+
     private val presenter: UserPresenter by moxyPresenter {
         var user =  arguments?.getParcelable<UsersItem>("user") as UsersItem
-        UserPresenter(user, GitHubUsersRepoImpl(GitUsersAPIClient(), NetworkStatusImpl(App.instance),
-             RoomGitHubRepositoriesCache(Database.getInstance())), AndroidSchedulers.mainThread(), App.instance.router)
+
+        UserPresenter(user, AndroidSchedulers.mainThread())
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,12 +89,13 @@ class UserFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener {
     companion object {
 
         @JvmStatic
-        fun newInstance(user: UsersItem): UserFragment {
-            val fragment = UserFragment()
-            val arg = Bundle()
-            arg.putParcelable("user", user)
-            fragment.arguments = arg
-            return fragment
+
+
+        fun newInstance(user: UsersItem) = UserFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("user", user)
+            }
+            App.instance.appComponent.inject(this)
         }
     }
 

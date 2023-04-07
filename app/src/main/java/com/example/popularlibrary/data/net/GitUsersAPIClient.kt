@@ -29,17 +29,17 @@ class GitUsersAPIClient {
             .build()
     }
 
-    private val serviceApi: GitUsersAPI by lazy {
-        return@lazy apiGitRetrofit(baseURL).create(GitUsersAPI::class.java)
-    }
+//    private val serviceApi: GitUsersAPI by lazy {
+//        return@lazy apiGitRetrofit(baseURL).create(GitUsersAPI::class.java)
+//    }
 
-    fun getListOfUsers(): Single<List<UsersItem>> = serviceApi.getUsers()
-
-
-    fun getUser(login: String): Single<UsersItem> = serviceApi.getUser(login)
-
-
-    fun getUserRepos(login: String): Single<List<ReposItem>> = serviceApi.getUserRepos(login)
+//    fun getListOfUsers(): Single<List<UsersItem>> = serviceApi.getUsers()
+//
+//
+//    fun getUser(login: String): Single<UsersItem> = serviceApi.getUser(login)
+//
+//
+//    fun getUserRepos(login: String): Single<List<ReposItem>> = serviceApi.getUserRepos(login)
 
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {

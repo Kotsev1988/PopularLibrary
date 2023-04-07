@@ -14,15 +14,7 @@ abstract class Database : RoomDatabase() {
     abstract val repositoryDao: RepositoryDao
 
     companion object{
-        private const val  DB_NAME = "database.db"
-        private var instance: Database? = null
+         const val  DB_NAME = "database.db"
 
-        fun getInstance() = instance ?: throw RuntimeException("No Database")
-
-        fun create(context: Context){
-            if (instance == null){
-                instance = Room.databaseBuilder(context, Database::class.java, DB_NAME).build()
-            }
-        }
     }
 }

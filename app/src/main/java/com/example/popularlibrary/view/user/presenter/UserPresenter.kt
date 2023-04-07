@@ -1,5 +1,6 @@
 package com.example.popularlibrary.view.user.presenter
 
+import com.example.popularlibrary.data.room.Database
 import com.example.popularlibrary.domain.IRepositoryRepo
 import com.example.popularlibrary.domain.repositories.ReposItem
 import com.example.popularlibrary.domain.users.UsersItem
@@ -9,14 +10,17 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
+import javax.inject.Inject
 
 class UserPresenter(
-    private val user: UsersItem,
-    private val repoList: IRepositoryRepo,
-    private val uiScheduler: Scheduler,
-    private val router: Router,
+    val user: UsersItem,
+    private val uiScheduler: Scheduler
 ) :
     MvpPresenter<ProfileView>() {
+
+
+    @Inject  lateinit var repoList: IRepositoryRepo
+    @Inject  lateinit var router: Router
 
     class ReposListPresenter() : IUserReposListPresenter {
         val repos = mutableListOf<ReposItem>()
@@ -55,7 +59,7 @@ class UserPresenter(
     }
 
     fun loadRepoData() {
-        repoList.getUserRepos(login = user)
+        repoList.getUserRepos(user)
             .observeOn(uiScheduler)
             .subscribe({ repoList ->
                 repoListPresenter.repos.clear()

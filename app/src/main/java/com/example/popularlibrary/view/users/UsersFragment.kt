@@ -7,17 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrary.App
-import com.example.popularlibrary.data.GitUsersRepoImpl
-import com.example.popularlibrary.data.net.GitUsersAPIClient
-import com.example.popularlibrary.data.room.Database
-import com.example.popularlibrary.data.room.cache.room.RoomGitHubUserCache
 import com.example.popularlibrary.databinding.FragmentUsersBinding
-import com.example.popularlibrary.view.AndroidScreens
-import com.example.popularlibrary.view.users.presenter.UsersPresenter
 import com.example.popularlibrary.view.BackButtonListener
-import com.example.popularlibrary.view.network.NetworkStatusImpl
 import com.example.popularlibrary.view.users.adapter.UsersAdapter
 import com.example.popularlibrary.view.users.loadImage.GlideImageLoader
+import com.example.popularlibrary.view.users.presenter.UsersPresenter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -28,13 +22,10 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
 
-    private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(
-            GitUsersRepoImpl(GitUsersAPIClient(), NetworkStatusImpl(App.instance),
-            RoomGitHubUserCache(Database.getInstance())),
-            AndroidSchedulers.mainThread(),
-            App.instance.router,
-            AndroidScreens())
+     val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter(AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
     private var adapter: UsersAdapter? = null
 
@@ -60,7 +51,9 @@ class UsersFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     companion object {
 
         @JvmStatic
-        fun newInstance() = UsersFragment()
+        fun newInstance() = UsersFragment().apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun init() {

@@ -11,17 +11,24 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
-import moxy.InjectViewState
 import moxy.MvpPresenter
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-@InjectViewState
+
 class UsersPresenter(
-    private val usersList: IUserRepo,
-    private val uiObserve: Scheduler,
-    private val router: Router,
-    private val screens: IScreens,
+    private val uiObserve: Scheduler
 ) : MvpPresenter<UserView>() {
+
+    @Inject
+    lateinit var usersList: IUserRepo
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var screens: IScreens
+
 
     class ListPresenter : IUsersListPresenter {
 
@@ -63,6 +70,7 @@ class UsersPresenter(
 
      fun loadData() {
 
+
          usersList.getUsers()
             .observeOn(uiObserve).subscribe(
                 { repos ->
@@ -75,8 +83,6 @@ class UsersPresenter(
                 })
     }
 
-    fun destroyView() {
-    }
 
     fun backPressed(): Boolean {
         router.exit()
